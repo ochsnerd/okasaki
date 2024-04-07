@@ -99,10 +99,12 @@ fuse (T R t1 x t2) t3@(T B _ _ _) = T R t1 x (fuse t2 t3)
 fuse (T R t1 x t2) (T R t3 y t4)  =
   let s = fuse t2 t3
   in case s of
+       E             -> (T R t1 x (T R E y t4))
        (T R s1 z s2) -> (T R (T R t1 x s1) z (T R s2 y t4))
        (T B _ _ _)   -> (T R t1 x (T R s y t4))
 fuse (T B t1 x t2) (T B t3 y t4)  =
   let s = fuse t2 t3
   in case s of
+       E             -> balL (T B t1 x (T B E y t4))
        (T R s1 z s2) -> (T R (T B t1 x s1) z (T B s2 y t4)) -- consfusing case
        (T B s1 z s2) -> balL (T B t1 x (T B s y t4))
